@@ -22,23 +22,26 @@ const initialState = {
 
 export const carReducer = ( state = initialState, action ) => {
     // console.log("STATE: ",state)
-    console.log("ACTION: ", action)
+    console.log('ACTION: ', action)
     switch(action.type){
         case BUY_ITEM:
-            console.log("PAYLOAD: ", action.payload)
-            // return {
-            //     ...state,
-            //     additionalPrice: state.additionalPrice + action.payload.item.price,
-            //     car: {...state.car, features: [...state.car.features, action.payload.item ]},
-            //     store: state.store.filter( item => item.id !== action.payload.item.id )
-            // }
+            console.log('ADD FEATURE PAYLOAD: ', action.payload)
+            return {
+                ...state,
+                // additionalPrice: state.additionalPrice + action.payload.price,
+                car: {...state.car, features: [...state.car.features, action.payload ], price: state.car.price + action.payload.price},
+                store: state.store.filter(({id}) => ![...state.car.features.map(({id}) => id), action.payload.id].includes(id))
+                // filter through store array, create a new array populated with current id of all features including action id from payload
+                // make sure the id we are filtering on does not match the id inside of the array we created
+            };
         case REMOVE_FEATURE:
+            console.log('REMOVE FEATURE PAYLOAD: ', action.payload)
             return {
                 ...state, 
-                additionalPrice: state.additionalPrice - action.payload.item.price,
-                car: {...state.car, features: state.car.features.filter( item => item.id !== action.payload.item.id )},
-                store: [...state.store, action.payload.item ]
-            }
+                // additionalPrice: state.additionalPrice - action.payload.price,
+                car: {...state.car, features: state.car.features.filter(({id}) => ![...state.store.map(({id}) => id), action.payload.id].includes(id)), price: state.car.price - action.payload.price},
+                store: [...state.store, action.payload]
+            };
         default: 
         return state
     }
