@@ -1,6 +1,8 @@
  // comment just because i hate my code starting at line 1 and want a reason to give it space to breathe
 
-export const initialState = {
+import { BUY_ITEM , REMOVE_FEATURE } from '../actions'
+
+const initialState = {
     additionalPrice: 0,
     car: {
         price: 26395,
@@ -19,9 +21,24 @@ export const initialState = {
 
 
 export const carReducer = ( state = initialState, action ) => {
-    console.log("STATE:",state)
+    // console.log("STATE: ",state)
+    console.log("ACTION: ", action)
     switch(action.type){
-
+        case BUY_ITEM:
+            console.log("PAYLOAD: ", action.payload)
+            return {
+                ...state,
+                additionalPrice: state.additionalPrice + action.payload.item.price,
+                car: {...state.car, features: [...state.car.features, action.payload ]},
+                store: state.store.filter( item => item.id !== action.payload.item.id )
+            }
+        case REMOVE_FEATURE:
+            return {
+                ...state, 
+                additionalPrice: state.additionalPrice - action.payload.item.price,
+                car: {...state.car, features: state.car.features.filter( item => item.id !== action.payload.item.id )},
+                store: [...state.store, action.payload.item ]
+            }
         default: 
         return state
     }

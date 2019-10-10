@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { removeFeature } from '../actions/carActions'
  
 import AddedFeature from './AddedFeature';
 
 export const AddedFeatures = props => {
   return (
     <div className="content">
-      {console.log("PROPS:" , props)}
+      {console.log("ADDED FEATURES:" , props.car.features)}
       <h6>Added features:</h6>
       {props.car.features ? (
         <ol type="1">
@@ -29,5 +30,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {}
+  { removeFeature }
 )(AddedFeatures)
